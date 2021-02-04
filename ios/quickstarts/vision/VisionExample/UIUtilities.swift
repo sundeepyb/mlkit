@@ -362,6 +362,24 @@ public class UIUtilities {
     }
     return deviceOrientation()
   }
+
+  public static func angle(
+          firstLandmark: PoseLandmark,
+          midLandmark: PoseLandmark,
+          lastLandmark: PoseLandmark
+      ) -> CGFloat {
+          let radians: CGFloat =
+              atan2(lastLandmark.position.y - midLandmark.position.y,
+                        lastLandmark.position.x - midLandmark.position.x) -
+                atan2(firstLandmark.position.y - midLandmark.position.y,
+                        firstLandmark.position.x - midLandmark.position.x)
+          var degrees = radians * 180.0 / .pi
+          degrees = abs(degrees) // Angle should never be negative
+          if degrees > 180.0 {
+              degrees = 360.0 - degrees // Always get the acute representation of the angle
+          }
+          return degrees
+      }
 }
 
 // MARK: - Constants

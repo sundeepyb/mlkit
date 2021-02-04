@@ -265,6 +265,29 @@ class CameraViewController: UIViewController {
                                                 height: height)
             }
           )
+            let rightKneeAngle = UIUtilities.angle(
+                  firstLandmark: pose.landmark(ofType: .rightShoulder),
+                  midLandmark: pose.landmark(ofType: .rightHip),
+                  lastLandmark: pose.landmark(ofType: .rightKnee))
+            let normalizedRect = CGRect(
+              x: Constant.imageLabelResultFrameX,
+              y: Constant.imageLabelResultFrameY,
+              width: Constant.imageLabelResultFrameWidth,
+              height: Constant.imageLabelResultFrameHeight
+            )
+            let standardizedRect = self.previewLayer.layerRectConverted(
+              fromMetadataOutputRect: normalizedRect
+            ).standardized
+            UIUtilities.addRectangle(
+              standardizedRect,
+              to: self.annotationOverlayView,
+              color: UIColor.gray
+            )
+            let uiLabel = UILabel(frame: standardizedRect)
+            uiLabel.text = "Hip Angle: \(rightKneeAngle)°, " + poses.joinWithSeparator("\n").joined(separator: "\n")
+            uiLabel.numberOfLines = 0
+            uiLabel.adjustsFontSizeToFitWidth = true
+            self.annotationOverlayView.addSubview(uiLabel)
           strongSelf.annotationOverlayView.addSubview(poseOverlayView)
         }
       }
